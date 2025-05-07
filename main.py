@@ -1,26 +1,55 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
+from tabulate import tabulate
+
+load_dotenv()
 
 try:
-    def connect_db(schema):
-        my_db = mysql.connector.connect(
-            host = os.getenv("BD_HOST"),
-            user = os.getenv("BD_ADMIN_USER"),
-            password = os.getenv("BD_ADMIN_PASSWORD"),
-            database=schema
-        )
+    mydb = mysql.connector.connect(
+        host = os.getenv("BD_HOST"),
+        user = os.getenv("BD_ADMIN_USER"),
+        password = os.getenv("BD_ADMIN_PASSWORD"),
+        database = "projeto padaria"
+    )
+    
+except Exception as e:
+    print(f"Erro: {e}") 
 
-except:
-        print('Fatal Error')
+mycursor = mydb.cursor()
+
+def list_itens(item: str, extra=""):
+    command = f"SHOW {item.upper()} {extra}".strip()
+    """
+    item: command after SHOW (example: 'databases', 'tables', 'columns')
+    extra: infos extras (ex: 'FROM cliente' to show columns)
+    """
+    try:
+        mycursor.execute(command)
+        print(f"\n{item.title()} existentes:\n")
         
+        if item.lower() == "columns":
+            for result in mycursor:
+                print(f" - {result[0]}")
+        
+        else:
+            for (result,) in mycursor:
+                print(f" - {result}")
+                
+    except Exception as e:
+        print(f"Erro: {e}") 
+        
+def select_table(table):
+    mycursor.execute(f"SELECT * FROM {table}")
+    all_data = mycursor.fetchall()
+    header_name = [column[0] for column in mycursor.description]
+    return tabulate(all_data, headers=header_name, tablefmt="grid")
+       
+       
 
-def list_db_schemas():
-    mycursor = my_db.cursor()
-    mycursor.execute("SHOW DATABASES")
+            
+list_itens("columns", "FROM cliente")
 
-    for schema in mycursor:
-     print(schema)
-     
-list_db_schemas()
-
+#list_db_schemas()
+#show_tables()
+#print(show_data_table('cliente'))
