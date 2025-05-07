@@ -21,6 +21,7 @@ class Menu:
                 print("Opção inválida!")
     def exibir_menu_visualizar(self):
         while True:
+            limpar_terminal()
             opcao = input("Visualizar: 1 - [bancos] 2 - [tabelas] 3 - [colunas] 0 - [voltar]: ").strip()
             if opcao == "1":
                 list_itens("databases")
