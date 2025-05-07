@@ -58,8 +58,23 @@ def filter_table(*items, table, filter_=None):
             
   
   
-def filter_join(*items, table, type_join=None, filter_=None):
+def filter_join(*items, table, join_table, on_condition, type_join, filter_=None):
+    columns = ", ".join(items)
+    
+    sql = f"SELECT {columns} FROM {table} {type_join.upper()} JOIN {join_table} ON {on_condition}"
+    
+    
+    if filter_:
+        sql += f" WHERE {filter_}"
+        
+    try:
+        mycursor.execute(sql)
+        data = mycursor.fetchall()
+        headers = [col[0] for col in mycursor.description]
+        return tabulate(data, headers=headers, tablefmt="grid")
 
+    except Exception as e:
+        return f"Erro ao executar o JOIN: {e}"
           
 print(filter_table(("CPF, NOME"), table=("cliente"), filter_=("NOME LIKE 'A%'")))
 
