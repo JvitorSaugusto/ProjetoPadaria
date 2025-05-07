@@ -145,3 +145,4 @@ while True:
     elif menu == "0":
         print("Encerrando programa...")
         break
+    
