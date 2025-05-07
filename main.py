@@ -1,17 +1,26 @@
-from mysql.connector import connect
+import mysql.connector
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+try:
+    def connect_db(schema):
+        my_db = mysql.connector.connect(
+            host = os.getenv("BD_HOST"),
+            user = os.getenv("BD_ADMIN_USER"),
+            password = os.getenv("BD_ADMIN_PASSWORD"),
+            database=schema
+        )
 
-print("HOST:", os.getenv("BD_HOST"))
-print("USER:", os.getenv("BD_ADMIN_USER"))
-print("PWD :", os.getenv("BD_PASSWORD"))
+except:
+        print('Fatal Error')
+        
 
-my_db = connect(
-    host = os.getenv("BD_HOST"),
-    user = os.getenv("BD_ADMIN_USER"),
-    password = os.getenv("BD_ADMIN_PASSWORD")
-)
+def list_db_schemas():
+    mycursor = my_db.cursor()
+    mycursor.execute("SHOW DATABASES")
 
-print(my_db)
+    for schema in mycursor:
+     print(schema)
+     
+list_db_schemas()
+
