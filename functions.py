@@ -1,9 +1,6 @@
-import mysql.connector
-from dotenv import load_dotenv
-import os
 from tabulate import tabulate
 from db_config import mycursor
-load_dotenv()
+import os
 
 def list_itens(item: str, extra=""):
     command = f"SHOW {item.upper()} {extra}".strip()
@@ -63,6 +60,5 @@ def filter_join(*items, table, join_table, on_condition, type_join, filter_=None
     except Exception as e:
         return f"Erro ao executar o JOIN: {e}"
     
-
-if __name__ == "__main__":
-    
+def limpar_terminal():
+    os.system("cls" if os.name == "nt" else "clear")
