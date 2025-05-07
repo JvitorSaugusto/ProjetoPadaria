@@ -10,7 +10,7 @@ try:
         host = os.getenv("BD_HOST"),
         user = os.getenv("BD_ADMIN_USER"),
         password = os.getenv("BD_ADMIN_PASSWORD"),
-        database = "projeto padaria"
+        database = "projeto_padaria_t"
     )
     
 except Exception as e:
