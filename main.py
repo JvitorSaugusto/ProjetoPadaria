@@ -45,10 +45,25 @@ def select_table(table):
     header_name = [column[0] for column in mycursor.description]
     return tabulate(all_data, headers=header_name, tablefmt="grid")
        
-       
 
+def filter_table(*items, table, filter_=None):
+    columns = ", ".join(items)
+    sql = f"SELECT {columns} FROM {table}"
+    if filter_:
+        sql += f" WHERE {filter_}"
+    mycursor.execute(sql)
+    data = mycursor.fetchall()
+    headers = [col[0] for col in mycursor.description]
+    return tabulate(data, headers=headers, tablefmt="grid")
             
-list_itens("columns", "FROM cliente")
+  
+  
+def filter_join(*items, table, type_join=None, filter_=None):
+
+          
+print(filter_table(("CPF, NOME"), table=("cliente"), filter_=("NOME LIKE 'A%'")))
+
+#list_itens("columns", "FROM cliente")
 
 #list_db_schemas()
 #show_tables()
