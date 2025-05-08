@@ -6,7 +6,7 @@ class Menu:
 
     def exibir_menu_principal(self):
         while True:
-            limpar_terminal()
+
             print('Programa de gerenciamento de DB iniciado')
             opcao = input("Escolha uma das opções: 1 - [visualizar] 2 - [consultar tabela] 0 - [sair do sistema]: ").strip()
             
@@ -21,7 +21,7 @@ class Menu:
                 print("Opção inválida!")
     def exibir_menu_visualizar(self):
         while True:
-            limpar_terminal()
+            
             opcao = input("Visualizar: 1 - [bancos] 2 - [tabelas] 3 - [colunas] 0 - [voltar]: ").strip()
             if opcao == "1":
                 list_itens("databases")
@@ -38,7 +38,7 @@ class Menu:
 
     def exibir_menu_consultas(self):
         while True:
-            limpar_terminal()
+            
             opcao = input("Consulta: 1 - [total] 2 - [parcial] 3 - [join] 0 - [voltar]: ").strip()
             if opcao == "1":
                 tabela = input("Tabela para SELECT total: ").strip()
