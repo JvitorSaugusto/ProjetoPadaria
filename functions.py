@@ -9,14 +9,16 @@ def list_itens(item: str, extra=""):
     """
     try:
         if item.lower() == "tables":
-            command = f"SHOW TABLES FROM {NAME_DB}"
+            command = "SHOW TABLES FROM %s"
+            params = (NAME_DB,)
         elif item.lower() == "columns":
             # extra deve ser algo como "FROM nome_tabela"
-            command = f"SHOW COLUMNS {extra}"
+            command = "SHOW COLUMNS %s"
+            params = (extra,) 
         else:
             command = f"SHOW {item.upper()} {extra}".strip()
 
-        mycursor.execute(command)
+        mycursor.execute(command, params)
         print(f"\n{item.title()} existentes:\n")
 
         if item.lower() == "columns":
@@ -30,6 +32,7 @@ def list_itens(item: str, extra=""):
         print(f"Erro: {e}")
 
 def select_table(table):
+    print("\nAqui estão os dados atuais de sua tabela: \n")
     mycursor.execute(f"SELECT * FROM {table}")
     all_data = mycursor.fetchall()
     header_name = [column[0] for column in mycursor.description]
@@ -61,3 +64,13 @@ def filter_join(*items, table, join_table, on_condition, type_join, filter_=None
 
 def limpar_terminal():
     os.system("cls" if os.name == "nt" else "clear")
+
+
+def verify_is_str(value:str):
+    #checks if string contains no digits
+    while True:
+            if any(char.isdigit() for char in value):
+                value = input('Valor invalido, digite novamente: ')
+            else:
+                return value
+                
