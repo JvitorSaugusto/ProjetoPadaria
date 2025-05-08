@@ -1,13 +1,12 @@
 from functions import list_itens, select_table, filter_join, filter_table, limpar_terminal
-
+from db_config import NAME_DB
 class Menu:
     def __init__(self, cursor):
         self.cursor = cursor
 
     def exibir_menu_principal(self):
         while True:
-
-            print('Programa de gerenciamento de DB iniciado')
+            print('Sistema da Padaria - Gerenciamento de Banco de Dados')
             opcao = input("Escolha uma das opções: 1 - [visualizar] 2 - [consultar tabela] 0 - [sair do sistema]: ").strip()
             
             if opcao == "1":
@@ -19,16 +18,13 @@ class Menu:
                 break
             else:
                 print("Opção inválida!")
+
     def exibir_menu_visualizar(self):
         while True:
-            
-            opcao = input("Visualizar: 1 - [bancos] 2 - [tabelas] 3 - [colunas] 0 - [voltar]: ").strip()
+            opcao = input("Visualizar: 1 - [tabelas] 2 - [colunas] 0 - [voltar]: ").strip()
             if opcao == "1":
-                list_itens("databases")
+                list_itens("tables", "FROM {NAME_DB}")
             elif opcao == "2":
-                nome_db = input("Nome do banco: ").strip()
-                list_itens("tables", f"FROM {nome_db}")
-            elif opcao == "3":
                 nome_tabela = input("Nome da tabela: ").strip()
                 list_itens("columns", f"FROM {nome_tabela}")
             elif opcao == "0":
@@ -38,7 +34,6 @@ class Menu:
 
     def exibir_menu_consultas(self):
         while True:
-            
             opcao = input("Consulta: 1 - [total] 2 - [parcial] 3 - [join] 0 - [voltar]: ").strip()
             if opcao == "1":
                 tabela = input("Tabela para SELECT total: ").strip()
