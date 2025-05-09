@@ -2,34 +2,38 @@ from tabulate import tabulate
 from db_config import mycursor, NAME_DB
 import os
 
-def list_itens(item: str, extra=""):
+def list_itens(item: str, table_name: str = None):
     """
-    item: comando após SHOW (ex: 'tables', 'columns')
-    extra: informações adicionais (ex: 'FROM cliente' para colunas)
+    Lista tabelas ou colunas do banco de dados.
+
+    item: 'tables' ou 'columns'
+    table_name: nome da tabela (necessário apenas para 'columns')
     """
     try:
         if item.lower() == "tables":
-            command = "SHOW TABLES FROM %s"
-            params = (NAME_DB,)
+            command = f"SHOW TABLES FROM `{NAME_DB}`"
+            params = None
         elif item.lower() == "columns":
-            # extra deve ser algo como "FROM nome_tabela"
-            command = "SHOW COLUMNS %s"
-            params = (extra,) 
+            if not table_name:
+                raise ValueError("Você precisa fornecer o nome da tabela para visualizar colunas.")
+            command = f"SHOW COLUMNS FROM `{table_name}` FROM `{NAME_DB}`"
+            params = None
         else:
-            command = f"SHOW {item.upper()} {extra}".strip()
+            raise ValueError("Comando inválido. Use apenas 'tables' ou 'columns'.")
 
-        mycursor.execute(command, params)
+        if params:
+            mycursor.execute(command, params)
+        else:
+            mycursor.execute(command)
+
         print(f"\n{item.title()} existentes:\n")
-
-        if item.lower() == "columns":
-            for result in mycursor:
-                print(f" - {result[0]}")
-        else:
-            for (result,) in mycursor:
-                print(f" - {result}")
+        for result in mycursor:
+            print(f" - {result[0]}")
 
     except Exception as e:
         print(f"Erro: {e}")
+
+
 
 def select_table(table):
     print("\nAqui estão os dados atuais de sua tabela: \n")

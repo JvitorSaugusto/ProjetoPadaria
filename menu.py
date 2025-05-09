@@ -23,10 +23,10 @@ class Menu:
         while True:
             opcao = input("Visualizar: 1 - [tabelas] 2 - [colunas] 0 - [voltar]: ").strip()
             if opcao == "1":
-                list_itens("tables", "FROM {NAME_DB}")
+                list_itens("tables")
             elif opcao == "2":
-                nome_tabela = input("Nome da tabela: ").strip()
-                list_itens("columns", f"FROM {nome_tabela}")
+                table_name = input("Nome da tabela: ").strip()
+                list_itens("columns", table_name)
             elif opcao == "0":
                 break
             else:

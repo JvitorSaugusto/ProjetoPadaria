@@ -22,7 +22,7 @@ class Produto():
         mycursor.execute(sql, value)
         print(select_table("produto"))
         
-produto1 = Produto("pipoca doce", "Uma pipoca deliciosa, com muito caramelo", 2, 11)
+#produto1 = Produto("pipoca doce", "Uma pipoca deliciosa, com muito caramelo", 2, 11)
 #produto1.add_product(mycursor)
 #produto1.remove_product(mycursor)
 
