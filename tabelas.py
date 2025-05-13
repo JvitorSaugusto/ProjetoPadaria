@@ -10,7 +10,7 @@ RELATORIO_PATH.mkdir(exist_ok=True)
 WORKBOOK_PATH = RELATORIO_PATH / 'workbook.xlsx'
 
 
-def criar_relatorio_completo(table):
+def criar_relatorio_completo  (table):
     sql = f"SELECT * FROM {table}"
     mycursor.execute(sql)
     

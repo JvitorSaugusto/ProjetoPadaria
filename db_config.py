@@ -20,3 +20,5 @@ except Exception as e:
 
 mycursor = mydb.cursor()
 
+def execute_(*args):
+    mycursor.execute(args)
