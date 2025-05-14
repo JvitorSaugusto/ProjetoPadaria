@@ -2,6 +2,7 @@ from functions import list_itens, select_table, filter_join, filter_table, limpa
 from tabelas import criar_relatorio_completo
 from produto import Produto
 from pdfs import create_full_report_pdf
+
 class Menu:
     def __init__(self, cursor):
         self.cursor = cursor
@@ -36,10 +37,16 @@ class SubmenuVisualizar(Menu):
             opcao = input("Escolha uma opção: ").strip()
 
             if opcao == "1":
-                list_itens("tables")
+                try:
+                    list_itens("tables")
+                except Exception as e:
+                    print(f"Erro ao listar tabelas: {e}")
             elif opcao == "2":
                 table_name = input("Nome da tabela: ").strip()
-                list_itens("columns", table_name)
+                try:
+                    list_itens("columns", table_name)
+                except Exception as e:
+                    print(f"Erro ao listar colunas: {e}")
             elif opcao == "0":
                 break
             else:
@@ -54,32 +61,36 @@ class SubmenuConsulta(Menu):
             print("3 - [JOIN]")
             print("0 - [Voltar]")
             opcao = input("Escolha uma opção: ").strip()
+            
+            try:
+                if opcao == "1":
+                    tabela = input("Tabela: ").strip()
+                    print(select_table(tabela))
+                elif opcao == "2":
+                    tabela = input("Tabela: ").strip()
+                    colunas = input("Colunas (separadas por vírgula): ").strip()
+                    filtro = input("Filtro WHERE: ").strip()
+                    print(filter_table(colunas, table=tabela, filter_=filtro))
+                elif opcao == "3":
+                    tabela = input("Tabela principal: ").strip()
+                    join_tabela = input("Tabela a unir: ").strip()
+                    colunas = input("Colunas (separadas por vírgula): ").strip().split(',')
+                    on_cond = input("Condição ON: ").strip()
+                    tipo_join = input("Tipo de JOIN (INNER, LEFT, RIGHT): ").strip()
+                    filtro = input("Filtro WHERE (opcional): ").strip() or None
 
-            if opcao == "1":
-                tabela = input("Tabela: ").strip()
-                print(select_table(tabela))
-            elif opcao == "2":
-                tabela = input("Tabela: ").strip()
-                colunas = input("Colunas (separadas por vírgula): ").strip()
-                filtro = input("Filtro WHERE: ").strip()
-                print(filter_table(colunas, table=tabela, filter_=filtro))
-            elif opcao == "3":
-                tabela = input("Tabela principal: ").strip()
-                join_tabela = input("Tabela a unir: ").strip()
-                colunas = input("Colunas (separadas por vírgula): ").strip().split(',')
-                on_cond = input("Condição ON: ").strip()
-                tipo_join = input("Tipo de JOIN (INNER, LEFT, RIGHT): ").strip()
-                filtro = input("Filtro WHERE (opcional): ").strip() or None
-
-                print(filter_join(
-                    *colunas, table=tabela, join_table=join_tabela,
-                    on_condition=on_cond, type_join=tipo_join, filter_=filtro
-                ))
-            elif opcao == "0":
-                break
-            else:
-                print("Opção inválida!")
-        
+                    print(filter_join(
+                        *colunas, table=tabela, join_table=join_tabela,
+                        on_condition=on_cond, type_join=tipo_join, filter_=filtro
+                    ))
+                elif opcao == "0":
+                    break
+                else:
+                    print("Opção inválida!")
+                    
+            except Exception as e:
+                print(f"Erro na consulta: {e}")
+                
 class Submenu_produto(Menu):
     def exibir_menu(self):
         while True:
@@ -106,22 +117,36 @@ class Submenu_produto(Menu):
                     print(f"Erro inesperado ao adicionar produto: {e}")
 
             elif opcao == "2":
-                nome = input("Nome do produto para remover: ").strip()
-                Produto.remover(nome)
+                try:
+                    nome = input("Nome do produto para remover: ").strip()
+                    Produto.remover(nome)
+                except Exception as e:
+                    print(f"Erro ao remover produto: {e}")
 
             elif opcao == "3":
-                nome = input("Nome do produto para atualizar o preço: ").strip()
-                novo_preco = float(input("Novo preço: "))
-                Produto.atualizar_preco(nome, novo_preco)
-
+                try:
+                    nome = input("Nome do produto para atualizar o preço: ").strip()
+                    novo_preco = float(input("Novo preço: "))
+                    Produto.atualizar_preco(nome, novo_preco)
+                    
+                except ValueError:
+                    print("Erro: o preço deve ser um número válido.")
+                except Exception as e:
+                    print(f"Erro ao atualizar preço: {e}")
+                    
             elif opcao == "4":
                 print("1 - [Planilha]")
                 print("2 - [PDF]")
                 opcao = input("Escolha uma opção: ").strip()
-                if opcao == "1":
-                    criar_relatorio_completo("produto")
-                elif opcao == "2":
-                    create_full_report_pdf("produto")
+                try:
+                    if opcao == "1":
+                        criar_relatorio_completo("produto")
+                    elif opcao == "2":
+                        create_full_report_pdf("produto")
+                    else:
+                        print("Opção inválida")
+                except Exception as e:
+                    print(f"Erro ao exportar relatório: {e}")
 
             elif opcao == "0":
                 break

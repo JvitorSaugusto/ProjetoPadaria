@@ -9,46 +9,48 @@ RELATORIO_PDF_PATH = BASE_PATH / "relatorios_pdf"
 RELATORIO_PDF_PATH.mkdir(exist_ok=True)
 
 def create_full_report_pdf(table):
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    CANVAS_PATH = RELATORIO_PDF_PATH / f'{table}_relatorio_{timestamp}.pdf'
-    
-    pdf = canvas.Canvas(str(CANVAS_PATH), pagesize=A4)
-    width, height = A4
-    
-    pdf.setFont("Helvetica-Bold", 14)
-    pdf.drawString(50, height - 50, f"Relatório da Tabela: {table}")
-    
-    mycursor.execute(f"SELECT * FROM {table}")
-    data = mycursor.fetchall()
-    columns = [col[0] for col in mycursor.description]
-    
-    x_start = 50
-    y_start = height - 80
-    current_y = y_start
-    row_spacing = 18
-    max_rows_per_page = 40
-    row_count = 0
+    try:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        CANVAS_PATH = RELATORIO_PDF_PATH / f'{table}_relatorio_{timestamp}.pdf'
+        
+        pdf = canvas.Canvas(str(CANVAS_PATH), pagesize=A4)
+        width, height = A4
+        
+        pdf.setFont("Helvetica-Bold", 14)
+        pdf.drawString(50, height - 50, f"Relatório da Tabela: {table}")
+        
+        mycursor.execute(f"SELECT * FROM {table}")
+        data = mycursor.fetchall()
+        columns = [col[0] for col in mycursor.description]
+        
+        x_start = 50
+        y_start = height - 80
+        current_y = y_start
+        row_spacing = 18
+        max_rows_per_page = 40
+        row_count = 0
 
-    pdf.setFont("Helvetica-Bold", 10)
-    for i, column in enumerate(columns):
-        pdf.drawString(x_start + i * 100, current_y, str(column))
-    
-    current_y -= row_spacing
-    row_count += 1
-    pdf.setFont("Helvetica", 10)
-
-    for row in data:
-        if row_count >= max_rows_per_page:
-            pdf.showPage()
-            current_y = height - 50
-            row_count = 0
-            # não reescreve o cabeçalho
-
-        for i, value in enumerate(row):
-            pdf.drawString(x_start + i * 100, current_y, str(value))
+        pdf.setFont("Helvetica-Bold", 10)
+        for i, column in enumerate(columns):
+            pdf.drawString(x_start + i * 100, current_y, str(column))
+        
         current_y -= row_spacing
         row_count += 1
+        pdf.setFont("Helvetica", 10)
 
-    pdf.save()
+        for row in data:
+            if row_count >= max_rows_per_page:
+                pdf.showPage()
+                current_y = height - 50
+                row_count = 0
 
-create_full_report_pdf("cliente")
+            for i, value in enumerate(row):
+                pdf.drawString(x_start + i * 100, current_y, str(value))
+            current_y -= row_spacing
+            row_count += 1
+
+        pdf.save()
+        print("Relatório criado com sucesso!")
+        
+    except Exception as e:
+        print(f"Erro ao gerar relatório PDF da tabela '{table}': {e}")

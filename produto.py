@@ -15,7 +15,7 @@ class Produto:
         try:
             mycursor.execute(sql, valores)
             print(select_table("produto"))
-            
+            print("Produto adicionado com sucesso!")
         except mysql.connector.Error as db_error:
             return f"Erro ao executar o JOIN: {db_error}"
         except Exception as e:
@@ -26,7 +26,7 @@ class Produto:
         try:
             mycursor.execute(sql, (nome,))
             print(select_table("produto"))
-            
+            print("Produto removido com sucesso!")
         except mysql.connector.Error as db_error:
             return f"Erro ao executar o JOIN: {db_error}"
         except Exception as e:

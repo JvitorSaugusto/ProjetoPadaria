@@ -11,23 +11,25 @@ WORKBOOK_PATH = RELATORIO_PATH / 'workbook.xlsx'
 
 
 def criar_relatorio_completo  (table):
-    sql = f"SELECT * FROM {table}"
-    mycursor.execute(sql)
-    
-    columns = [col[0] for col in mycursor.description]
-    data = mycursor.fetchall()
-    
-    workbook = Workbook()
-    worksheet: Worksheet = workbook.active
-#    worksheet.title = sheet_name
-    worksheet.append(columns)
-    
-    for line in data:
-        worksheet.append(line)
+    try:
+        sql = f"SELECT * FROM {table}"
+        mycursor.execute(sql)
+        
+        columns = [col[0] for col in mycursor.description]
+        data = mycursor.fetchall()
+        
+        workbook = Workbook()
+        worksheet: Worksheet = workbook.active
+    #    worksheet.title = sheet_name
+        worksheet.append(columns)
+        
+        for line in data:
+            worksheet.append(line)
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    WORKBOOK_PATH = RELATORIO_PATH / f'{table}_relatorio_{timestamp}.xlsx'
-    workbook.save(WORKBOOK_PATH)
-    print(f"Relatório salvo em: {WORKBOOK_PATH}")
-    
-criar_relatorio_completo("cliente")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        WORKBOOK_PATH = RELATORIO_PATH / f'{table}_relatorio_{timestamp}.xlsx'
+        workbook.save(WORKBOOK_PATH)
+        print(f"Relatório salvo em: {WORKBOOK_PATH}")
+        
+    except Exception as e:
+        print(f"Erro ao gerar relatório PDF da tabela '{table}': {e}")
