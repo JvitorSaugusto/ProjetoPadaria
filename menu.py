@@ -12,6 +12,7 @@ class Menu:
             print('\nSistema da Padaria - Gerenciamento de Banco de Dados')
             print("1 - [Visualizar]")
             print("2 - [Consultar tabela]")
+            print("3 - [Área de produtos]")
             print("0 - [Sair do sistema]")
             opcao = input("Escolha uma opção: ").strip()
 
@@ -20,6 +21,9 @@ class Menu:
                 submenu.show_menu()
             elif opcao == "2":
                 submenu = Submenu_Query(self.cursor)
+                submenu.show_menu()
+            elif opcao == "3":
+                submenu = Submenu_product(self.cursor)
                 submenu.show_menu()
             elif opcao == "0":
                 print("Encerrando programa...")
@@ -95,10 +99,10 @@ class Submenu_product(Menu):
     def show_menu(self):
         while True:
             print("\nGerenciar produtos:")
-            print("1 - [Adicionar]")
-            print("2 - [Remover]")
+            print("1 - [Adicionar produto]")
+            print("2 - [Remover produto]")
             print("3 - [Atualizar preço]")
-            print("4 - [Exportar para...]")
+            print("4 - [Exportar todos os produtos para...]")
             print("0 - [Voltar]")
             option = input("Escolha uma opção: ").strip()
 
@@ -141,8 +145,10 @@ class Submenu_product(Menu):
                 try:
                     if option == "1":
                         create_full_report_xlsx("produto")
+                        print("Dados dos produtos exportados com sucesso para XLSX!")
                     elif option == "2":
                         create_full_report_pdf("produto")
+                        print("Dados dos produtos exportados com sucesso para PDF!")
                     else:
                         print("Opção inválida")
                 except Exception as e:
