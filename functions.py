@@ -7,7 +7,7 @@ def list_itens(item: str, table_name: str = None):
     """
     Lista tabelas ou colunas do banco de dados.
 
-    item: 'tables' ou 'columns'
+    Item: 'tables' ou 'columns'
     table_name: nome da tabela (necessário apenas para 'columns')
     """
     try:
@@ -91,7 +91,7 @@ def verify_is_str(value:str):
         #checks if string contains no digits
         while True:
                 if any(char.isdigit() for char in value):
-                    value = input('Valor invalido, digite novamente: ')
+                    value = input('Valor inválido, digite novamente: ')
                 else:
                     return value
                 

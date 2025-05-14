@@ -20,7 +20,7 @@ class Produto:
             return f"Erro ao executar o JOIN: {db_error}"
         except Exception as e:
             return f"Erro inesperado: {e}"
-        
+    @staticmethod       
     def remover(nome: str):
         sql = "DELETE FROM produto WHERE nome = %s"
         try:
@@ -31,7 +31,7 @@ class Produto:
             return f"Erro ao executar o JOIN: {db_error}"
         except Exception as e:
             return f"Erro inesperado: {e}"
-
+    @staticmethod
     def atualizar_preco(nome: str, novo_preco: float):
         sql = "UPDATE produto SET preco_unidade = %s WHERE nome = %s"
         try:

@@ -1,7 +1,6 @@
 import mysql.connector
 from dotenv import load_dotenv
 import os
-from tabulate import tabulate
 
 load_dotenv()
 
@@ -15,10 +14,10 @@ try:
         database = NAME_DB
     )
     
+except mysql.connector.Error as db_error:
+    print (f"Erro ao executar o JOIN: {db_error}")
 except Exception as e:
-    print(f"Erro: {e}") 
+    print (f"Erro inesperado: {e}")
 
 mycursor = mydb.cursor()
 
-def execute_(*args):
-    mycursor.execute(args)
