@@ -3,16 +3,19 @@ from db_config import mycursor, NAME_DB
 import mysql.connector
 import os
 
+# Função que lista tabelas ou colunas de uma tabela específica
 def list_itens(item: str, table_name: str = None):
     """
     Lista tabelas ou colunas do banco de dados.
 
-    Item: 'tables' ou 'columns'
+    item: 'tables' ou 'columns'
     table_name: nome da tabela (necessário apenas para 'columns')
     """
     try:
         if item.lower() == "tables":
             command = f"SHOW TABLES FROM `{NAME_DB}`"
+            mycursor.execute(command)
+
         elif item.lower() == "columns":
             if not table_name:
                 raise ValueError("Você precisa fornecer o nome da tabela para visualizar colunas.")
@@ -21,7 +24,6 @@ def list_itens(item: str, table_name: str = None):
 
         else:
             raise ValueError("Comando inválido. Use apenas 'tables' ou 'columns'.")
-
         print(f"\n{item.title()} existentes:\n")
         for result in mycursor:
             print(f" - {result[0]}")
@@ -36,7 +38,6 @@ def list_itens(item: str, table_name: str = None):
         return f"Erro inesperado: {e}"
 
 
-
 def select_table(table):
     print("\nAqui estão os dados atuais de sua tabela: \n")
     try:
@@ -49,7 +50,8 @@ def select_table(table):
         return f"Erro de banco de dados: {db_error}"
     except Exception as e:
         return f"Erro inesperado: {e}"
-    
+
+
 def filter_table(*items, table, filter_=None):
     columns = ", ".join(items)
     sql = f"SELECT {columns} FROM {table}"
@@ -65,7 +67,8 @@ def filter_table(*items, table, filter_=None):
         return f"Erro de banco de dados: {db_error}"
     except Exception as e:
         return f"Erro inesperado: {e}"
-    
+
+
 def filter_join(*items, table, join_table, on_condition, type_join, filter_=None):
     columns = ", ".join(items)
     sql = f"SELECT {columns} FROM {table} {type_join.upper()} JOIN {join_table} ON {on_condition}"
@@ -86,12 +89,11 @@ def filter_join(*items, table, join_table, on_condition, type_join, filter_=None
 def clean_terminal():
     os.system("cls" if os.name == "nt" else "clear")
 
-
-def verify_is_str(value:str):
-        #checks if string contains no digits
-        while True:
-                if any(char.isdigit() for char in value):
-                    value = input('Valor inválido, digite novamente: ')
-                else:
-                    return value
-                
+# Função para validar se uma string contém apenas letras (sem números)
+def verify_is_str(value: str):
+    
+    while True:
+        if any(char.isdigit() for char in value):
+            value = input('Valor inválido, digite novamente: ')
+        else:
+            return value

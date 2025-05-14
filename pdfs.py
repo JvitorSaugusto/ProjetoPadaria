@@ -1,5 +1,5 @@
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, landscape
 from pathlib import Path
 from datetime import datetime
 from db_config import mycursor
@@ -8,20 +8,21 @@ BASE_PATH = Path(__file__).parent
 RELATORIO_PDF_PATH = BASE_PATH / "relatorios_pdf"
 RELATORIO_PDF_PATH.mkdir(exist_ok=True)
 
+# Função que gera um relatório completo em PDF com os dados de uma tabela
 def create_full_report_pdf(table):
     try:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         CANVAS_PATH = RELATORIO_PDF_PATH / f'{table}_relatorio_{timestamp}.pdf'
         
-        pdf = canvas.Canvas(str(CANVAS_PATH), pagesize=A4)
-        width, height = A4
-        
+        pdf = canvas.Canvas(str(CANVAS_PATH), pagesize=landscape(A4))
+        width, height = landscape(A4) 
+
         pdf.setFont("Helvetica-Bold", 14)
         pdf.drawString(50, height - 50, f"Relatório da Tabela: {table}")
         
         mycursor.execute(f"SELECT * FROM {table}")
         data = mycursor.fetchall()
-        columns = [col[0] for col in mycursor.description]
+        columns = [col[0] for col in mycursor.description]  # Cabeçalhos das colunas
         
         x_start = 50
         y_start = height - 80
@@ -43,7 +44,7 @@ def create_full_report_pdf(table):
                 pdf.showPage()
                 current_y = height - 50
                 row_count = 0
-
+                
             for i, value in enumerate(row):
                 pdf.drawString(x_start + i * 100, current_y, str(value))
             current_y -= row_spacing

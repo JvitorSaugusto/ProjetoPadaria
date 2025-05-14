@@ -17,10 +17,11 @@ class Product:
             print(select_table("produto"))
             print("Produto adicionado com sucesso!")
         except mysql.connector.Error as db_error:
-            return f"Erro ao executar o JOIN: {db_error}"
+            return f"Erro ao adicionar produto: {db_error}"
         except Exception as e:
             return f"Erro inesperado: {e}"
-    @staticmethod       
+
+    @staticmethod
     def remove_product(nome: str):
         sql = "DELETE FROM produto WHERE nome = %s"
         try:
@@ -28,17 +29,17 @@ class Product:
             print(select_table("produto"))
             print("Produto removido com sucesso!")
         except mysql.connector.Error as db_error:
-            return f"Erro ao executar o JOIN: {db_error}"
+            return f"Erro ao remover produto: {db_error}"
         except Exception as e:
             return f"Erro inesperado: {e}"
+
     @staticmethod
     def update_price(nome: str, novo_preco: float):
         sql = "UPDATE produto SET preco_unidade = %s WHERE nome = %s"
         try:
             mycursor.execute(sql, (novo_preco, nome))
             print(f"Preço do produto '{nome}' atualizado para {novo_preco}")
-            
         except mysql.connector.Error as db_error:
-            return f"Erro ao executar o JOIN: {db_error}"
+            return f"Erro ao atualizar o preço: {db_error}"
         except Exception as e:
             return f"Erro inesperado: {e}"

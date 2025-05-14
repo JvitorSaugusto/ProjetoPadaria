@@ -22,15 +22,19 @@ class Menu:
             if opcao == "1":
                 submenu = View_submenu(self.cursor)
                 submenu.show_menu()
+                
             elif opcao == "2":
                 submenu = Submenu_Query(self.cursor)
                 submenu.show_menu()
+                
             elif opcao == "3":
                 submenu = Submenu_product(self.cursor)
                 submenu.show_menu()
+                
             elif opcao == "4":
                 submenu = Submenu_report(self.cursor)
                 submenu.show_menu()
+                
             elif opcao == "5":
                 save_roll = input("Tem certeza que deseja salvar? s/n").lower()
                 if save_roll == "s":
@@ -40,6 +44,7 @@ class Menu:
                     mydb.rollback()
                     print("Alterações descartadas.")
                 break
+            
             elif opcao == "0":
                 confirm = input("Deseja salvar as alterações antes de sair? (s/n): ").lower()
                 if confirm == "s":
@@ -51,6 +56,7 @@ class Menu:
                 print("Encerrando programa...")
                 break
 
+# Submenu para visualizar tabelas e colunas
 class View_submenu(Menu):
     def show_menu(self):
         while True:
@@ -76,13 +82,14 @@ class View_submenu(Menu):
             else:
                 print("Opção inválida!")
 
+# Submenu para consultas com SQL dinâmico
 class Submenu_Query(Menu):
     def show_menu(self):
         while True:
             print("\nConsultas:")
-            print("1 - [Total]")
-            print("2 - [Parcial]")
-            print("3 - [JOIN]")
+            print("1 - [Total]")     # SELECT * FROM tabela
+            print("2 - [Parcial]")   # SELECT colunas FROM tabela WHERE condição
+            print("3 - [JOIN]")      # SELECT com JOIN
             print("0 - [Voltar]")
             opcao = input("Escolha uma opção: ").strip()
             
@@ -115,6 +122,7 @@ class Submenu_Query(Menu):
             except Exception as e:
                 print(f"Erro na consulta: {e}")
 
+# Submenu para exportar relatórios de tabelas
 class Submenu_report(Menu):
     def show_menu(self):
         while True:
@@ -147,6 +155,7 @@ class Submenu_report(Menu):
             else:
                 print("Opção inválida!")
                 
+# Submenu específico para CRUD de produtos
 class Submenu_product(Menu):
     def show_menu(self):
         while True:
