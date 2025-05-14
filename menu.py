@@ -1,9 +1,7 @@
 from functions import list_itens, select_table, filter_join, filter_table, limpar_terminal
 from tabelas import criar_relatorio_completo
-from db_config import NAME_DB
 from produto import Produto
 from pdfs import create_full_report_pdf
-from produtoDAO import ProdutoDAO
 class Menu:
     def __init__(self, cursor):
         self.cursor = cursor
@@ -99,22 +97,26 @@ class Submenu_produto(Menu):
                 id_tipo = int(input("ID do tipo: "))
                 preco = float(input("Preço unitário: "))
                 produto = Produto(nome, descricao, id_tipo, preco)
-                ProdutoDAO.add_product(produto, self.cursor)
+                produto.adicionar()
+
             elif opcao == "2":
                 nome = input("Nome do produto para remover: ").strip()
-                ProdutoDAO.remove_product(produto, self.cursor)
+                Produto.remover(nome)
+
             elif opcao == "3":
                 nome = input("Nome do produto para atualizar o preço: ").strip()
                 novo_preco = float(input("Novo preço: "))
-                ProdutoDAO.update_price(nome, novo_preco, self.cursor)
+                Produto.atualizar_preco(nome, novo_preco)
+
             elif opcao == "4":
                 print("1 - [Planilha]")
                 print("2 - [PDF]")
                 opcao = input("Escolha uma opção: ").strip()
-                if opcao == 1:
+                if opcao == "1":
                     criar_relatorio_completo("produto")
-                elif opcao == 2:
+                elif opcao == "2":
                     create_full_report_pdf("produto")
+
             elif opcao == "0":
                 break
             else:
