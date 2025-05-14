@@ -92,12 +92,18 @@ class Submenu_produto(Menu):
             opcao = input("Escolha uma opção: ").strip()
 
             if opcao == "1":
-                nome = input("Nome do produto: ").strip()
-                descricao = input("Descrição: ").strip()
-                id_tipo = int(input("ID do tipo: "))
-                preco = float(input("Preço unitário: "))
-                produto = Produto(nome, descricao, id_tipo, preco)
-                produto.adicionar()
+                try:
+                    nome = input("Nome do produto: ").strip()
+                    descricao = input("Descrição: ").strip()
+                    id_tipo = int(input("ID do tipo: "))
+                    preco = float(input("Preço unitário: "))
+                    produto = Produto(nome, descricao, id_tipo, preco)
+                    produto.adicionar()
+                    
+                except ValueError:
+                    print("Erro: ID_tipo deve ser um número inteiro e preço deve ser um número válido.")
+                except Exception as e:
+                    print(f"Erro inesperado ao adicionar produto: {e}")
 
             elif opcao == "2":
                 nome = input("Nome do produto para remover: ").strip()
