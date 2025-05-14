@@ -2,6 +2,7 @@ from functions import list_itens, select_table, filter_join, filter_table
 from tabelas import create_full_report_xlsx
 from produto import Product
 from pdfs import create_full_report_pdf
+from db_config import mydb
 
 class Menu:
     def __init__(self, cursor):
@@ -13,6 +14,8 @@ class Menu:
             print("1 - [Visualizar]")
             print("2 - [Consultar tabela]")
             print("3 - [Área de produtos]")
+            print("4 - [Área de relatórios]")
+            print("5 - [Salvar alterações]")
             print("0 - [Sair do sistema]")
             opcao = input("Escolha uma opção: ").strip()
 
@@ -25,11 +28,28 @@ class Menu:
             elif opcao == "3":
                 submenu = Submenu_product(self.cursor)
                 submenu.show_menu()
+            elif opcao == "4":
+                submenu = Submenu_report(self.cursor)
+                submenu.show_menu()
+            elif opcao == "5":
+                save_roll = input("Tem certeza que deseja salvar? s/n").lower()
+                if save_roll == "s":
+                    mydb.commit()
+                    print("Alterações salvas com sucesso")
+                else:
+                    mydb.rollback()
+                    print("Alterações descartadas.")
+                break
             elif opcao == "0":
+                confirm = input("Deseja salvar as alterações antes de sair? (s/n): ").lower()
+                if confirm == "s":
+                    mydb.commit()
+                    print("Alterações salvas com sucesso.")
+                else:
+                    mydb.rollback()
+                    print("Alterações descartadas.")
                 print("Encerrando programa...")
                 break
-            else:
-                print("Opção inválida!")
 
 class View_submenu(Menu):
     def show_menu(self):
@@ -94,6 +114,38 @@ class Submenu_Query(Menu):
                     
             except Exception as e:
                 print(f"Erro na consulta: {e}")
+
+class Submenu_report(Menu):
+    def show_menu(self):
+        while True:
+            print("\nGerar relatórios gerais:")
+            print("1 - [Exportar dados...]")
+            print("0 - [Voltar]")
+            option = input("Escolha uma opção: ").strip()
+
+            if option == "1":
+                table = input("De qual Tabela deseja exportar os dados?: ").strip()
+                print("Em qual formato deseja exportar?")
+                print("1 - [Formato de Planilha]")
+                print("2 - [Formato de PDF]")
+                option = input("Escolha uma opção: ").strip()
+                
+                try:
+                    if option == "1":
+                        create_full_report_xlsx(table)
+                        print(f"Dados de {table} exportados com sucesso para XLSX!")
+                    elif option == "2":
+                        create_full_report_pdf(table)
+                        print(f"Dados de {table} exportados com sucesso para PDF!")
+                    else:
+                        print("Opção inválida")
+                except Exception as e:
+                    print(f"Erro ao exportar relatório: {e}")
+
+            elif option == "0":
+                break
+            else:
+                print("Opção inválida!")
                 
 class Submenu_product(Menu):
     def show_menu(self):
