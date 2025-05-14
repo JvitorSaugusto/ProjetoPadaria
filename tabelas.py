@@ -5,12 +5,12 @@ from openpyxl.worksheet.worksheet import Worksheet
 from datetime import datetime
 
 BASE_PATH = Path(__file__).parent
-RELATORIO_PATH = BASE_PATH / "relatorios_xlsx"
-RELATORIO_PATH.mkdir(exist_ok=True)
-WORKBOOK_PATH = RELATORIO_PATH / 'workbook.xlsx'
+REPORT_PATH = BASE_PATH / "relatorios_xlsx"
+REPORT_PATH.mkdir(exist_ok=True)
+WORKBOOK_PATH = REPORT_PATH / 'workbook.xlsx'
 
 
-def criar_relatorio_completo  (table):
+def create_full_report_xlsx  (table):
     try:
         sql = f"SELECT * FROM {table}"
         mycursor.execute(sql)
@@ -27,7 +27,7 @@ def criar_relatorio_completo  (table):
             worksheet.append(line)
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        WORKBOOK_PATH = RELATORIO_PATH / f'{table}_relatorio_{timestamp}.xlsx'
+        WORKBOOK_PATH = REPORT_PATH / f'{table}_relatorio_{timestamp}.xlsx'
         workbook.save(WORKBOOK_PATH)
         print(f"Relatório salvo em: {WORKBOOK_PATH}")
         

@@ -1,6 +1,6 @@
-from functions import list_itens, select_table, filter_join, filter_table, limpar_terminal
-from tabelas import criar_relatorio_completo
-from produto import Produto
+from functions import list_itens, select_table, filter_join, filter_table
+from tabelas import create_full_report_xlsx
+from produto import Product
 from pdfs import create_full_report_pdf
 
 class Menu:
@@ -108,8 +108,8 @@ class Submenu_produto(Menu):
                     descricao = input("Descrição: ").strip()
                     id_tipo = int(input("ID do tipo: "))
                     preco = float(input("Preço unitário: "))
-                    produto = Produto(nome, descricao, id_tipo, preco)
-                    produto.adicionar()
+                    produto = Product(nome, descricao, id_tipo, preco)
+                    produto.add_product()
                     
                 except ValueError:
                     print("Erro: ID_tipo deve ser um número inteiro e preço deve ser um número válido.")
@@ -119,7 +119,7 @@ class Submenu_produto(Menu):
             elif opcao == "2":
                 try:
                     nome = input("Nome do produto para remover: ").strip()
-                    Produto.remover(nome)
+                    Product.remove_product(nome)
                 except Exception as e:
                     print(f"Erro ao remover produto: {e}")
 
@@ -127,7 +127,7 @@ class Submenu_produto(Menu):
                 try:
                     nome = input("Nome do produto para atualizar o preço: ").strip()
                     novo_preco = float(input("Novo preço: "))
-                    Produto.atualizar_preco(nome, novo_preco)
+                    Product.upgrade_price(nome, novo_preco)
                     
                 except ValueError:
                     print("Erro: o preço deve ser um número válido.")
@@ -140,7 +140,7 @@ class Submenu_produto(Menu):
                 opcao = input("Escolha uma opção: ").strip()
                 try:
                     if opcao == "1":
-                        criar_relatorio_completo("produto")
+                        create_full_report_xlsx("produto")
                     elif opcao == "2":
                         create_full_report_pdf("produto")
                     else:

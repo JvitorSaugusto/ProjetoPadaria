@@ -2,14 +2,14 @@ from db_config import mycursor
 from functions import verify_is_str, select_table
 import mysql.connector
 
-class Produto:
+class Product:
     def __init__(self, nome: str, descricao: str, id_tipo_prod: int, preco_unidade: float):
         self.nome = verify_is_str(nome)
         self.descricao = descricao
         self.id_tipo_prod = id_tipo_prod
         self.preco_unidade = preco_unidade
 
-    def adicionar(self):
+    def add_product(self):
         sql = "INSERT INTO produto (nome, descricao, id_tipo_prod, preco_unidade) VALUES (%s, %s, %s, %s)"
         valores = (self.nome, self.descricao, self.id_tipo_prod, self.preco_unidade)
         try:
@@ -21,7 +21,7 @@ class Produto:
         except Exception as e:
             return f"Erro inesperado: {e}"
     @staticmethod       
-    def remover(nome: str):
+    def remove_product(nome: str):
         sql = "DELETE FROM produto WHERE nome = %s"
         try:
             mycursor.execute(sql, (nome,))
@@ -32,7 +32,7 @@ class Produto:
         except Exception as e:
             return f"Erro inesperado: {e}"
     @staticmethod
-    def atualizar_preco(nome: str, novo_preco: float):
+    def update_price(nome: str, novo_preco: float):
         sql = "UPDATE produto SET preco_unidade = %s WHERE nome = %s"
         try:
             mycursor.execute(sql, (novo_preco, nome))

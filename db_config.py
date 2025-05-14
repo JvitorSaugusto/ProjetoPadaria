@@ -20,4 +20,3 @@ except Exception as e:
     print (f"Erro inesperado: {e}")
 
 mycursor = mydb.cursor()
-

@@ -83,7 +83,7 @@ def filter_join(*items, table, join_table, on_condition, type_join, filter_=None
     except Exception as e:
         return f"Erro inesperado: {e}"
 
-def limpar_terminal():
+def clean_terminal():
     os.system("cls" if os.name == "nt" else "clear")
 
 
