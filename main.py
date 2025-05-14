@@ -3,8 +3,8 @@ from menu import Menu
 from pathlib import Path
 
 BASE_PATH = Path(__file__).parent
-RELATORIO_PATH = BASE_PATH / "relatorios_xlsx"
+REPORT_PATH = BASE_PATH / "relatorios_xlsx"
 
 if __name__ == "__main__":
     menu = Menu(mycursor)
-    menu.exibir_menu_principal()
+    menu.show_main_menu()
