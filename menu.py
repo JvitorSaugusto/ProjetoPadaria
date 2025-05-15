@@ -11,7 +11,7 @@ class Menu:
     def show_main_menu(self):
         while True:
             print('\nSistema da Padaria - Gerenciamento de Banco de Dados')
-            print("1 - [Visualizar]")
+            print("1 - [Área Banco de dados]")
             print("2 - [Consultar tabela]")
             print("3 - [Área de produtos]")
             print("4 - [Área de relatórios]")
