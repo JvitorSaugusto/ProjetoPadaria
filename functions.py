@@ -97,3 +97,18 @@ def verify_is_str(value: str):
             value = input('Valor inválido, digite novamente: ')
         else:
             return value
+
+def is_safe_query(sql_query: str) -> bool:
+    """
+    Verifica se a query SQL é segura para execução (somente SELECT).
+    Bloqueia comandos perigosos como INSERT, UPDATE, DELETE, etc.
+    """
+    sql = sql_query.strip().lower()
+    
+    # Lista de palavras proibidas
+    keywords_block = ["insert", "update", "delete", "drop", "alter", "create", "--", ";"]
+    
+    return (
+        sql.startswith("select")
+        and not any(keyword in sql for keyword in keywords_block)
+    )

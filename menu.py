@@ -1,7 +1,7 @@
-from functions import list_itens, select_table, filter_join, filter_table
-from tabelas import create_full_report_xlsx
+from functions import list_itens, select_table, filter_join, filter_table, is_safe_query
+from tabelas import create_full_report_xlsx, create_report_xlsx_from_query
 from produto import Product
-from pdfs import create_full_report_pdf
+from pdfs import create_full_report_pdf, create_report_pdf_from_query
 from db_config import mydb
 
 class Menu:
@@ -121,13 +121,14 @@ class Submenu_Query(Menu):
                     
             except Exception as e:
                 print(f"Erro na consulta: {e}")
-
+                    
 # Submenu para exportar relatórios de tabelas
 class Submenu_report(Menu):
     def show_menu(self):
         while True:
-            print("\nGerar relatórios gerais:")
-            print("1 - [Exportar dados...]")
+            print("\nGerar relatórios:")
+            print("1 - [Gera relatórios com todos os dados de uma tabela]")
+            print("2 - [Gera relatórios com consultas e dados personalizados]")
             print("0 - [Voltar]")
             option = input("Escolha uma opção: ").strip()
 
@@ -149,6 +150,23 @@ class Submenu_report(Menu):
                         print("Opção inválida")
                 except Exception as e:
                     print(f"Erro ao exportar relatório: {e}")
+            elif option == "2":
+                sql_query = input("Digite sua consulta SQL (somente SELECT): ")
+                report_name = input("Digite o nome do seu relatório (opcional)")
+                print("Em qual formato deseja exportar?")
+                print("1 - [Formato de Planilha]")
+                print("2 - [Formato de PDF]")
+                option = input("Escolha uma opção: ").strip()
+                if option == "1":
+                    if is_safe_query(sql_query):
+                        create_report_xlsx_from_query(sql_query, report_name)
+                    else:
+                        print("Consulta potencialmente perigosa! Somente SELECTs simples são permitidos.")
+                elif option == "2":
+                    if is_safe_query(sql_query):
+                        create_report_pdf_from_query(sql_query, report_name)
+                    else:
+                        print("Consulta potencialmente perigosa! Somente SELECTs simples são permitidos.")
 
             elif option == "0":
                 break

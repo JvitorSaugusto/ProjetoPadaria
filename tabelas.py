@@ -32,4 +32,28 @@ def create_full_report_xlsx  (table):
         print(f"Relatório salvo em: {WORKBOOK_PATH}")
         
     except Exception as e:
-        print(f"Erro ao gerar relatório PDF da tabela '{table}': {e}")
+        print(f"Erro ao gerar relatório XLSX da tabela '{table}': {e}")
+
+
+def create_report_xlsx_from_query(sql_query, report_name="relatorio"):
+    try:
+        mycursor.execute(sql_query)
+        
+        columns = [col[0] for col in mycursor.description]
+        data = mycursor.fetchall()
+        
+        workbook = Workbook()
+        worksheet: Worksheet = workbook.active
+    #    worksheet.title = sheet_name
+        worksheet.append(columns)
+        
+        for line in data:
+            worksheet.append(line)
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        WORKBOOK_PATH = REPORT_PATH / f'{report_name}_relatorio_{timestamp}.xlsx'
+        workbook.save(WORKBOOK_PATH)
+        print(f"Relatório salvo em: {WORKBOOK_PATH}")
+        
+    except Exception as e:
+        print(f"Erro ao gerar relatório XLSX personalizado '{report_name}': {e}")
