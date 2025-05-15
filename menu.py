@@ -1,4 +1,4 @@
-from functions import list_itens, select_table, filter_join, filter_table, is_safe_query
+from functions import list_itens, select_table, filter_join, filter_table, is_safe_query, clean_terminal
 from tabelas import create_full_report_xlsx, create_report_xlsx_from_query
 from produto import Product
 from pdfs import create_full_report_pdf, create_report_pdf_from_query
@@ -10,6 +10,7 @@ class Menu:
 
     def show_main_menu(self):
         while True:
+            clean_terminal()
             print('\n=== Sistema da Padaria - Gerenciamento de Banco de Dados ===')
             print("1 - [Visualizar estrutura do banco]")
             print("2 - [Consultar dados das tabelas]")
@@ -43,6 +44,7 @@ class Menu:
                 else:
                     mydb.rollback()
                     print("⚠️ Alterações descartadas.")
+                input("\nPressione Enter para continuar...")
                 break
             
             elif opcao == "0":
@@ -54,12 +56,13 @@ class Menu:
                     mydb.rollback()
                     print("⚠️ Alterações descartadas.")
                 print("Encerrando programa...")
+                input("\nPressione Enter para continuar...")
                 break
 
-# Submenu para visualizar tabelas e colunas
 class View_submenu(Menu):
     def show_menu(self):
         while True:
+            clean_terminal()
             print("\n--- Visualização da Estrutura do Banco de Dados ---")
             print("1 - [Listar todas as tabelas]")
             print("2 - [Listar colunas de uma tabela]")
@@ -71,21 +74,24 @@ class View_submenu(Menu):
                     list_itens("tables")
                 except Exception as e:
                     print(f"Erro ao listar tabelas: {e}")
+                input("\nPressione Enter para continuar...")
             elif opcao == "2":
                 table_name = input("Digite o nome da tabela: ").strip()
                 try:
                     list_itens("columns", table_name)
                 except Exception as e:
                     print(f"Erro ao listar colunas: {e}")
+                input("\nPressione Enter para continuar...")
             elif opcao == "0":
                 break
             else:
                 print("⚠️ Opção inválida!")
+                input("\nPressione Enter para continuar...")
 
-# Submenu para consultas com SQL dinâmico
 class Submenu_Query(Menu):
     def show_menu(self):
         while True:
+            clean_terminal()
             print("\n--- Consultas SQL ---")
             print("1 - [Exibir todos os dados de uma tabela]")
             print("2 - [Consulta personalizada com filtros]")
@@ -118,14 +124,14 @@ class Submenu_Query(Menu):
                     break
                 else:
                     print("⚠️ Opção inválida!")
-                    
             except Exception as e:
                 print(f"Erro na consulta: {e}")
-                    
-# Submenu para exportar relatórios de tabelas
+            input("\nPressione Enter para continuar...")
+
 class Submenu_report(Menu):
     def show_menu(self):
         while True:
+            clean_terminal()
             print("\n--- Geração de Relatórios ---")
             print("1 - [Exportar todos os dados de uma tabela]")
             print("2 - [Exportar dados de uma consulta personalizada]")
@@ -150,6 +156,7 @@ class Submenu_report(Menu):
                         print("⚠️ Opção inválida.")
                 except Exception as e:
                     print(f"Erro ao exportar relatório: {e}")
+                input("\nPressione Enter para continuar...")
 
             elif option == "2":
                 sql_query = input("Digite sua consulta SQL (somente SELECT): ").strip()
@@ -173,15 +180,18 @@ class Submenu_report(Menu):
                         print("❌ Consulta potencialmente perigosa! Apenas SELECTs simples são permitidos.")
                 except Exception as e:
                     print(f"Erro ao gerar relatório: {e}")
+                input("\nPressione Enter para continuar...")
+
             elif option == "0":
                 break
             else:
                 print("⚠️ Opção inválida!")
+                input("\nPressione Enter para continuar...")
 
-# Submenu específico para CRUD de produtos
 class Submenu_product(Menu):
     def show_menu(self):
         while True:
+            clean_terminal()
             print("\n--- Gerenciamento de Produtos ---")
             print("1 - [Adicionar novo produto]")
             print("2 - [Remover produto existente]")
@@ -202,6 +212,7 @@ class Submenu_product(Menu):
                     print("❌ ID do tipo deve ser inteiro e preço deve ser um número válido.")
                 except Exception as e:
                     print(f"Erro inesperado ao adicionar produto: {e}")
+                input("\nPressione Enter para continuar...")
 
             elif option == "2":
                 try:
@@ -209,6 +220,7 @@ class Submenu_product(Menu):
                     Product.remove_product(nome)
                 except Exception as e:
                     print(f"Erro ao remover produto: {e}")
+                input("\nPressione Enter para continuar...")
 
             elif option == "3":
                 try:
@@ -219,6 +231,7 @@ class Submenu_product(Menu):
                     print("❌ O preço deve ser um número válido.")
                 except Exception as e:
                     print(f"Erro ao atualizar preço: {e}")
+                input("\nPressione Enter para continuar...")
 
             elif option == "4":
                 print("Escolha o formato de exportação:")
@@ -236,8 +249,10 @@ class Submenu_product(Menu):
                         print("⚠️ Opção inválida.")
                 except Exception as e:
                     print(f"Erro ao exportar produtos: {e}")
+                input("\nPressione Enter para continuar...")
 
             elif option == "0":
                 break
             else:
                 print("⚠️ Opção inválida!")
+                input("\nPressione Enter para continuar...")
