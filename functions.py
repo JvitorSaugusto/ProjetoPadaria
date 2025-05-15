@@ -3,7 +3,7 @@ from db_config import mycursor, NAME_DB
 import mysql.connector
 import os
 
-# Função que lista tabelas ou colunas de uma tabela específica
+# Função que lista todas as tabelas do BD ou colunas de uma tabela específica
 def list_itens(item: str, table_name: str = None):
     """
     Lista tabelas ou colunas do banco de dados.
@@ -24,7 +24,11 @@ def list_itens(item: str, table_name: str = None):
 
         else:
             raise ValueError("Comando inválido. Use apenas 'tables' ou 'columns'.")
-        print(f"\n{item.title()} existentes:\n")
+        
+        if item.lower() == "tables":
+            print("\nTodas as tabelas existentes no banco de dados:\n")
+        elif item.lower() == "columns":
+            print(f"\nColunas da tabela '{table_name}':\n")
         for result in mycursor:
             print(f" - {result[0]}")
 

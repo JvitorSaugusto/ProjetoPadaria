@@ -10,11 +10,11 @@ class Menu:
 
     def show_main_menu(self):
         while True:
-            print('\nSistema da Padaria - Gerenciamento de Banco de Dados')
-            print("1 - [Área Banco de dados]")
-            print("2 - [Consultar tabela]")
-            print("3 - [Área de produtos]")
-            print("4 - [Área de relatórios]")
+            print('\n=== Sistema da Padaria - Gerenciamento de Banco de Dados ===')
+            print("1 - [Visualizar estrutura do banco]")
+            print("2 - [Consultar dados das tabelas]")
+            print("3 - [Gerenciar produtos]")
+            print("4 - [Gerar relatórios]")
             print("5 - [Salvar alterações]")
             print("0 - [Sair do sistema]")
             opcao = input("Escolha uma opção: ").strip()
@@ -36,23 +36,23 @@ class Menu:
                 submenu.show_menu()
                 
             elif opcao == "5":
-                save_roll = input("Tem certeza que deseja salvar? s/n").lower()
+                save_roll = input("Tem certeza que deseja salvar? (s/n): ").lower()
                 if save_roll == "s":
                     mydb.commit()
-                    print("Alterações salvas com sucesso")
+                    print("✅ Alterações salvas com sucesso.")
                 else:
                     mydb.rollback()
-                    print("Alterações descartadas.")
+                    print("⚠️ Alterações descartadas.")
                 break
             
             elif opcao == "0":
                 confirm = input("Deseja salvar as alterações antes de sair? (s/n): ").lower()
                 if confirm == "s":
                     mydb.commit()
-                    print("Alterações salvas com sucesso.")
+                    print("✅ Alterações salvas com sucesso.")
                 else:
                     mydb.rollback()
-                    print("Alterações descartadas.")
+                    print("⚠️ Alterações descartadas.")
                 print("Encerrando programa...")
                 break
 
@@ -60,10 +60,10 @@ class Menu:
 class View_submenu(Menu):
     def show_menu(self):
         while True:
-            print("\nVisualizar:")
-            print("1 - [Tabelas]")
-            print("2 - [Colunas]")
-            print("0 - [Voltar]")
+            print("\n--- Visualização da Estrutura do Banco de Dados ---")
+            print("1 - [Listar todas as tabelas]")
+            print("2 - [Listar colunas de uma tabela]")
+            print("0 - [Voltar ao menu principal]")
             opcao = input("Escolha uma opção: ").strip()
 
             if opcao == "1":
@@ -72,7 +72,7 @@ class View_submenu(Menu):
                 except Exception as e:
                     print(f"Erro ao listar tabelas: {e}")
             elif opcao == "2":
-                table_name = input("Nome da tabela: ").strip()
+                table_name = input("Digite o nome da tabela: ").strip()
                 try:
                     list_itens("columns", table_name)
                 except Exception as e:
@@ -80,22 +80,22 @@ class View_submenu(Menu):
             elif opcao == "0":
                 break
             else:
-                print("Opção inválida!")
+                print("⚠️ Opção inválida!")
 
 # Submenu para consultas com SQL dinâmico
 class Submenu_Query(Menu):
     def show_menu(self):
         while True:
-            print("\nConsultas:")
-            print("1 - [Total]")     # SELECT * FROM tabela
-            print("2 - [Parcial]")   # SELECT colunas FROM tabela WHERE condição
-            print("3 - [JOIN]")      # SELECT com JOIN
-            print("0 - [Voltar]")
+            print("\n--- Consultas SQL ---")
+            print("1 - [Exibir todos os dados de uma tabela]")
+            print("2 - [Consulta personalizada com filtros]")
+            print("3 - [Consulta com JOIN entre tabelas]")
+            print("0 - [Voltar ao menu principal]")
             opcao = input("Escolha uma opção: ").strip()
             
             try:
                 if opcao == "1":
-                    table = input("Tabela: ").strip()
+                    table = input("Digite o nome da tabela: ").strip()
                     print(select_table(table))
                 elif opcao == "2":
                     table = input("Tabela: ").strip()
@@ -104,9 +104,9 @@ class Submenu_Query(Menu):
                     print(filter_table(columns, table=table, filter_=filter))
                 elif opcao == "3":
                     table = input("Tabela principal: ").strip()
-                    join_tabela = input("Tabela a unir: ").strip()
+                    join_tabela = input("Tabela a ser unida: ").strip()
                     columns = input("Colunas (separadas por vírgula): ").strip().split(',')
-                    on_cond = input("Condição ON: ").strip()
+                    on_cond = input("Condição ON (ex: t1.id = t2.id_tabela): ").strip()
                     join_type = input("Tipo de JOIN (INNER, LEFT, RIGHT): ").strip()
                     filter = input("Filtro WHERE (opcional): ").strip() or None
 
@@ -117,7 +117,7 @@ class Submenu_Query(Menu):
                 elif opcao == "0":
                     break
                 else:
-                    print("Opção inválida!")
+                    print("⚠️ Opção inválida!")
                     
             except Exception as e:
                 print(f"Erro na consulta: {e}")
@@ -126,63 +126,68 @@ class Submenu_Query(Menu):
 class Submenu_report(Menu):
     def show_menu(self):
         while True:
-            print("\nGerar relatórios:")
-            print("1 - [Gera relatórios com todos os dados de uma tabela]")
-            print("2 - [Gera relatórios com consultas e dados personalizados]")
-            print("0 - [Voltar]")
+            print("\n--- Geração de Relatórios ---")
+            print("1 - [Exportar todos os dados de uma tabela]")
+            print("2 - [Exportar dados de uma consulta personalizada]")
+            print("0 - [Voltar ao menu principal]")
             option = input("Escolha uma opção: ").strip()
 
             if option == "1":
-                table = input("De qual Tabela deseja exportar os dados?: ").strip()
-                print("Em qual formato deseja exportar?")
-                print("1 - [Formato de Planilha]")
-                print("2 - [Formato de PDF]")
+                table = input("Digite o nome da tabela: ").strip()
+                print("Escolha o formato de exportação:")
+                print("1 - [Planilha XLSX]")
+                print("2 - [Arquivo PDF]")
                 option = input("Escolha uma opção: ").strip()
                 
                 try:
                     if option == "1":
                         create_full_report_xlsx(table)
-                        print(f"Dados de {table} exportados com sucesso para XLSX!")
+                        print(f"✅ Dados da tabela '{table}' exportados com sucesso para XLSX!")
                     elif option == "2":
                         create_full_report_pdf(table)
-                        print(f"Dados de {table} exportados com sucesso para PDF!")
+                        print(f"✅ Dados da tabela '{table}' exportados com sucesso para PDF!")
                     else:
-                        print("Opção inválida")
+                        print("⚠️ Opção inválida.")
                 except Exception as e:
                     print(f"Erro ao exportar relatório: {e}")
-            elif option == "2":
-                sql_query = input("Digite sua consulta SQL (somente SELECT): ")
-                report_name = input("Digite o nome do seu relatório (opcional)")
-                print("Em qual formato deseja exportar?")
-                print("1 - [Formato de Planilha]")
-                print("2 - [Formato de PDF]")
-                option = input("Escolha uma opção: ").strip()
-                if option == "1":
-                    if is_safe_query(sql_query):
-                        create_report_xlsx_from_query(sql_query, report_name)
-                    else:
-                        print("Consulta potencialmente perigosa! Somente SELECTs simples são permitidos.")
-                elif option == "2":
-                    if is_safe_query(sql_query):
-                        create_report_pdf_from_query(sql_query, report_name)
-                    else:
-                        print("Consulta potencialmente perigosa! Somente SELECTs simples são permitidos.")
 
+            elif option == "2":
+                sql_query = input("Digite sua consulta SQL (somente SELECT): ").strip()
+                report_name = input("Nome do relatório (opcional): ").strip()
+                print("Escolha o formato de exportação:")
+                print("1 - [Planilha XLSX]")
+                print("2 - [Arquivo PDF]")
+                option = input("Escolha uma opção: ").strip()
+                
+                try:
+                    if is_safe_query(sql_query):
+                        if option == "1":
+                            create_report_xlsx_from_query(sql_query, report_name)
+                            print("✅ Relatório exportado com sucesso em XLSX!")
+                        elif option == "2":
+                            create_report_pdf_from_query(sql_query, report_name)
+                            print("✅ Relatório exportado com sucesso em PDF!")
+                        else:
+                            print("⚠️ Opção inválida.")
+                    else:
+                        print("❌ Consulta potencialmente perigosa! Apenas SELECTs simples são permitidos.")
+                except Exception as e:
+                    print(f"Erro ao gerar relatório: {e}")
             elif option == "0":
                 break
             else:
-                print("Opção inválida!")
-                
+                print("⚠️ Opção inválida!")
+
 # Submenu específico para CRUD de produtos
 class Submenu_product(Menu):
     def show_menu(self):
         while True:
-            print("\nGerenciar produtos:")
-            print("1 - [Adicionar produto]")
-            print("2 - [Remover produto]")
-            print("3 - [Atualizar preço]")
-            print("4 - [Exportar todos os produtos para...]")
-            print("0 - [Voltar]")
+            print("\n--- Gerenciamento de Produtos ---")
+            print("1 - [Adicionar novo produto]")
+            print("2 - [Remover produto existente]")
+            print("3 - [Atualizar preço do produto]")
+            print("4 - [Exportar todos os produtos]")
+            print("0 - [Voltar ao menu principal]")
             option = input("Escolha uma opção: ").strip()
 
             if option == "1":
@@ -193,47 +198,46 @@ class Submenu_product(Menu):
                     preco = float(input("Preço unitário: "))
                     produto = Product(nome, descricao, id_tipo, preco)
                     produto.add_product()
-                    
                 except ValueError:
-                    print("Erro: ID_tipo deve ser um número inteiro e preço deve ser um número válido.")
+                    print("❌ ID do tipo deve ser inteiro e preço deve ser um número válido.")
                 except Exception as e:
                     print(f"Erro inesperado ao adicionar produto: {e}")
 
             elif option == "2":
                 try:
-                    nome = input("Nome do produto para remover: ").strip()
+                    nome = input("Nome do produto a ser removido: ").strip()
                     Product.remove_product(nome)
                 except Exception as e:
                     print(f"Erro ao remover produto: {e}")
 
             elif option == "3":
                 try:
-                    nome = input("Nome do produto para atualizar o preço: ").strip()
+                    nome = input("Nome do produto: ").strip()
                     novo_preco = float(input("Novo preço: "))
                     Product.upgrade_price(nome, novo_preco)
-                    
                 except ValueError:
-                    print("Erro: o preço deve ser um número válido.")
+                    print("❌ O preço deve ser um número válido.")
                 except Exception as e:
                     print(f"Erro ao atualizar preço: {e}")
-                    
+
             elif option == "4":
-                print("1 - [Planilha]")
-                print("2 - [PDF]")
+                print("Escolha o formato de exportação:")
+                print("1 - [Planilha XLSX]")
+                print("2 - [Arquivo PDF]")
                 option = input("Escolha uma opção: ").strip()
                 try:
                     if option == "1":
                         create_full_report_xlsx("produto")
-                        print("Dados dos produtos exportados com sucesso para XLSX!")
+                        print("✅ Produtos exportados com sucesso para XLSX!")
                     elif option == "2":
                         create_full_report_pdf("produto")
-                        print("Dados dos produtos exportados com sucesso para PDF!")
+                        print("✅ Produtos exportados com sucesso para PDF!")
                     else:
-                        print("Opção inválida")
+                        print("⚠️ Opção inválida.")
                 except Exception as e:
-                    print(f"Erro ao exportar relatório: {e}")
+                    print(f"Erro ao exportar produtos: {e}")
 
             elif option == "0":
                 break
             else:
-                print("Opção inválida!")
+                print("⚠️ Opção inválida!")
