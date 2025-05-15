@@ -68,13 +68,13 @@ class View_submenu(Menu):
 
             if opcao == "1":
                 try:
-                    list_itens("tabelas")
+                    list_itens("tables")
                 except Exception as e:
                     print(f"Erro ao listar tabelas: {e}")
             elif opcao == "2":
                 table_name = input("Nome da tabela: ").strip()
                 try:
-                    list_itens("colunas", table_name)
+                    list_itens("columns", table_name)
                 except Exception as e:
                     print(f"Erro ao listar colunas: {e}")
             elif opcao == "0":
